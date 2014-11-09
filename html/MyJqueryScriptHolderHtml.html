@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>jQuery Practice file</title>
+    <style type="text/css">
+        .highlight
+        {
+            background-color: yellow;
+        }
+        .search
+        {
+            width:80px;
+        }
+
+        .phoneTypeDiv
+        {
+            display: inline;
+
+        }
+        .phoneNumberDiv
+        {
+          display: inline-block;
+        }
+    </style>
+    <script type="text/javascript" src="../js/jquery-2.1.1.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('html').css('margin', '50px');
+//
+//            $('#banana').mouseenter(function(){
+//                toogleHighlight (this);
+//            }).mouseout(function(){
+//                toogleHighlight (this);
+//            }).css('cursor', 'pointer')
+//                    .mouseup(
+//                    function(e)
+//                    {
+//                        $(this).text('page x : '+ e.pageX + 'page y : '+ e.pageY);
+//                    }
+//            );
+
+            $('#submitButton').click(function()
+            {
+                actionOnSubmitButton();
+            });
+
+            $('#banana').bind('mouseenter mouseout mouseup', function(e){
+
+                if(e.type=='mouseenter' || e.type=='mouseout')
+                $(this).toggleClass('highlight');
+                $(this).css('cursor', 'pointer');
+                if(e.type=='mouseup')
+                {
+                    $(this).text('page x : '+ e.pageX + 'page y : '+ e.pageY);
+                }
+
+            });
+
+            $('#search').bind('click blur', function(e)
+            {
+                if(e.type=="click")
+                {
+                    $(this).removeClass('search');
+                }
+                else
+                {
+                    $(this).addClass('search');
+                }
+            });
+
+            var phoneDiv = $('#phoneDiv');
+
+            $('#addPhone').click(
+                    function()
+                    {
+                        var phoneSelDiv = $('div:eq(0)', phoneDiv).clone();
+                        var phoneTbDiv = $('div:eq(1)', phoneDiv).clone();
+                        $('select', phoneSelDiv).val('');
+                        $('input', phoneTbDiv).val('');
+
+                        phoneDiv.append('<div style="clear:both;"/>')
+                                .append(phoneSelDiv)
+                                .append(phoneTbDiv);
+
+
+                    });
+
+            phoneDiv.delegate('input', 'keypress', function(e){
+
+               if((e.keyCode<48 || e.keyCode > 57) && e.keyCode !=45)
+               {
+                   e.stopPropagation();
+                   return false;
+               }
+            });
+
+            });
+
+
+
+
+        function actionOnSubmitButton()
+        {
+            var name = $('#name').val();
+            var password = $('#password').val();
+
+            $("#myData").text("Name: "+name+" Password: "+password);
+            $('#banana').unbind('mouseup');
+        }
+
+    </script>
+</head>
+<body>
+<div id="banana">I am banana</div>
+<div id="orange">I am orange</div>
+<div id="mango">I am mango</div>
+<br/>
+
+<form id="fruitForm">
+
+    <input type="text" id="search" class="search" placeholder="Search"/>
+
+    <table>
+        <tr>
+            <td><label for="name">Name</label></label> </td>
+            <td><input type="text" name="name" id="name" value="" placeholder="Insert Name"></td>
+        </tr>
+
+        <tr>
+            <td><label for="password">Password</label></label></td>
+            <td><input type="password" id="password" name="password" placeholder="Insert Password"></td>
+        </tr>
+        <tr><td><input type="button" name="submitButton" id="submitButton" value="Submit"/></td></tr>
+    </table>
+
+    <input type="button" id="addPhone" value="Add Phone"/>
+    <div id="phoneDiv" style="margin-top: 10px;">
+        <div class="phoneTypeDiv">
+            <select class="phoneType">
+                <option value="">Select One:</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Office">Office</option>
+            </select>
+        </div>
+        <div class="phoneNumberDiv">
+        <input type="text" class="phoneNumber" maxlength="12">
+        </div>
+
+    </div>
+
+</form>
+<div id="myData"></div>
+</body>
+</html>
